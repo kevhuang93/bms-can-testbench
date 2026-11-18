@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bms-can-testbench"
+version = "0.1.0"
+description = "Simulated EV battery management system on CAN, with a black-box pytest test framework"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+dependencies = [
+    "python-can>=4.4",
+    "cantools>=39",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "pytest-html>=4",
+    "ruff>=0.6",
+]
+
+[project.scripts]
+canbench-sim = "canbench.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+canbench = ["dbc/*.dbc"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+markers = [
+    "req(id): links a test to a requirement in docs/TEST_PLAN.md",
+    "integration: black-box tests against a running BMS target",
+]
+
+[tool.ruff]
+line-length = 110
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
